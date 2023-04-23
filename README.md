@@ -27,7 +27,7 @@ Mumbai network.
 
 ### How can I test this locally?
 
-You can use [Ngrok](https://ngrok.com/) to expose your local environment to the internet. Just type `ngrok http 3000`
+You can use [Ngrok](https://ngrok.com/) to expose your local environment to the internet. Open a terminal window and type `ngrok http 3000`
 and you will get a URL that you can use to test your webhook.
 
 Example URL by Ngrok: https://bc9d-2a01-11-9210-5a40-5c18-d3b5-7dcd-b34e.ngrok-free.app
