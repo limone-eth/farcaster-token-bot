@@ -3,12 +3,9 @@
 ## Setup
 
 1. Populate _.env_ file:
-    1. `WALLET_PRIVATE_KEY`
-        - [How to export a Metamask account's private key](https://support.metamask.io/hc/en-us/articles/360015289632-How-to-export-an-account-s-private-key)
-    2. `ALCHEMY_API_KEY`
-        - [Alchemy API Key](https://docs.alchemy.com/docs/alchemy-quickstart-guide#1key-create-an-alchemy-key)
-    3. `ALCHEMY_WEBHOOK_SIGNING_KEY`
-        - [Alchemy Custom Webhooks](https://docs.alchemy.com/reference/custom-webhook#how-to-set-up-custom-webhooks)
+    1. `WALLET_PRIVATE_KEY` - [How to export a Metamask account's private key](https://support.metamask.io/hc/en-us/articles/360015289632-How-to-export-an-account-s-private-key)
+    2. `ALCHEMY_API_KEY` - [Alchemy API Key](https://docs.alchemy.com/docs/alchemy-quickstart-guide#1key-create-an-alchemy-key)
+    3. `ALCHEMY_WEBHOOK_SIGNING_KEY` - [Alchemy Custom Webhooks](https://docs.alchemy.com/reference/custom-webhook#how-to-set-up-custom-webhooks)
 2. Run `npm install` to install dependencies
 3. Run `npm run build` to build the project and compile Typescript in Javascript
 4. Run `npm run start` to start the Express server and listen to API calls
