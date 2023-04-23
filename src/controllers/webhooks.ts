@@ -20,8 +20,11 @@ export async function processWebhookEvent(
     (l) => l.topics[0] === constants.TOKEN_SMART_CONTRACT.TRANSFER_EVENT_TOPIC
   );
   console.log("Logs found in webhook event", logsData);
-  const {to, amount} = decodeTransferEvent(logsData.topics, logsData.data);
-  console.log("Decoded register event", {to, amount});
+  const {from, to, amount} = decodeTransferEvent(
+    logsData.topics,
+    logsData.data
+  );
+  console.log("Decoded register event", {from, to, amount});
 
   /**
    * Do things here with the received data

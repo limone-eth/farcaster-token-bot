@@ -12,8 +12,6 @@ export const decodeTransferEvent = (
     topics,
   });
   const [from, to, amount] = event.args;
-  const x = BigNumber(amount).toNumber();
-  console.log(x);
   return {
     to, // the address that received the tokens
     from, // the address that sent the tokens
