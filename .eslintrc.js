@@ -47,6 +47,6 @@ module.exports = {
     "object-curly-spacing": "warn",
     "array-bracket-spacing": "warn",
     "space-in-parens": "warn",
-    "no-console": ["warn"],
+    "no-console": false,
   },
 };
