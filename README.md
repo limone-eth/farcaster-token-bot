@@ -32,7 +32,7 @@ and you will get a URL that you can use to test your webhook.
 
 Example URL by Ngrok: https://bc9d-2a01-11-9210-5a40-5c18-d3b5-7dcd-b34e.ngrok-free.app
 
-So on Alchemy you can put https://bc9d-2a01-11-9210-5a40-5c18-d3b5-7dcd-b34e.ngrok-free.app**/webhooks/events**
+So on Alchemy you can put https://bc9d-2a01-11-9210-5a40-5c18-d3b5-7dcd-b34e.ngrok-free.app/webhooks/events
 
 ## Test the project
 Once everything is set up, you can test the project by sending a POST request to the following endpoint: 
