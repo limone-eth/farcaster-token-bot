@@ -16,13 +16,16 @@ export const getTransferSignedTransaction = async (
   transferToAddress: string,
   transferAmount: number
 ): Promise<SignedTransaction> => {
+  // get contract
   const contract = new web3.eth.Contract(
     tokenContractAbi as any,
     constants.TOKEN_SMART_CONTRACT.ADDRESS
   );
+  // get account
   const account = web3.eth.accounts.privateKeyToAccount(
     process.env.WALLET_PRIVATE_KEY
   );
+
   const encodedABI = contract.methods["transfer"](
     transferToAddress,
     transferAmount

@@ -57,7 +57,7 @@ Follow this guide to recreate the repo step-by-step.
    will be
    able to edit later.
 2. Before starting to code, let's first **install all the packages that we will need along our
-   journey**: `npm install --save express ethers web3 web3-eth web3-eth-accounts bignumber.js`
+   journey**: `npm install --save express ethers web3 web3-eth web3-eth-accounts bignumber.js dotenv`
     1. _express_: to easily setup a REST API
     2. _ethers, web3, web3-eth, web3-eth-accounts_: needed for our web3 shenanigans (interacting with the blockchain)
     3. _bignumber.js_: the blockchain uses this format to represent numbers, so we need it to properly decode some data
