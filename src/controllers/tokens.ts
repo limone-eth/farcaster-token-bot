@@ -1,17 +1,23 @@
+import {ThirdwebSDK} from "@thirdweb-dev/sdk";
 import {Request, Response} from "express";
-import {
-  getTransferSignedTransaction,
-  sendSignedTransaction,
-} from "../utils/smart-contracts/web3";
+import {constants} from "../constants";
+import {tokenContractAbi} from "../utils/smart-contracts/abi";
 
 export async function sendTokens(req: Request, res: Response): Promise<void> {
   const {address, amount} = req.body;
-  const signedTx = await getTransferSignedTransaction(address, amount);
+  const thirdwebSDK = ThirdwebSDK.fromPrivateKey(
+    process.env.WALLET_PRIVATE_KEY,
+    constants.POLYGON_MUMBAI_RPC
+  );
   try {
     // get the transaction hash
-    const tx = await sendSignedTransaction(signedTx.rawTransaction);
+    const contract = await thirdwebSDK.getContractFromAbi(
+      constants.TOKEN_SMART_CONTRACT.ADDRESS,
+      tokenContractAbi
+    );
+    const data = await contract.call("transfer", [address, amount]);
     console.log(`Sending ${amount} tokens to ${address}`, {
-      txHash: tx.transactionHash,
+      data,
       params: {address, amount},
     });
     res.status(200).json({message: "OK"});

@@ -6,7 +6,7 @@ export const decodeTransferEvent = (
   topics: Array<string>,
   data: string
 ): {to: string; amount: number; from: string} => {
-  const iface = new ethers.Interface(tokenContractAbi);
+  const iface = new ethers.utils.Interface(tokenContractAbi);
   const event = iface.parseLog({
     data,
     topics,
