@@ -4,6 +4,7 @@ import {constants} from "../constants";
 import {decodeSwapEvent} from "../utils/smart-contracts/decode-events";
 import {getFarcasterIdentity} from "../utils/web3-bio";
 import {ethers} from "ethers";
+import { publishCast } from "../utils/farcaster";
 
 export async function processWebhookEvent(
   req: Request,
@@ -43,8 +44,8 @@ export async function processWebhookEvent(
 
   const {amountIn, amountOut} = decodeSwapEvent(logsData.topics, logsData.data);
 
-  const pointsAmount = amountIn > amountOut ? amountIn : amountOut;
-  const wethAmount = amountIn > amountOut ? amountOut : amountIn;
+  const pointsAmount = amountIn.gte(amountOut) ? amountIn : amountOut;
+  const wethAmount = amountIn.gte(amountOut) ? amountOut : amountIn;
 
   const formattedPointsAmount = ethers.utils
     .formatUnits(pointsAmount, 18)
@@ -52,15 +53,6 @@ export async function processWebhookEvent(
   const formattedWethAmount = ethers.utils
     .formatUnits(wethAmount, 18)
     .replace(/(\.\d{0,4})\d*$/, "$1");
-
-  console.log({
-    amountIn,
-    amountOut,
-    pointsAmount,
-    wethAmount,
-    formattedPointsAmount,
-    formattedWethAmount,
-  });
 
   try {
     const farcasterIdentity = await getFarcasterIdentity(
@@ -77,8 +69,8 @@ export async function processWebhookEvent(
     }`;
 
     console.log(text, txUrl);
-    /*const castHash = await publishCast(`${text}\n\n${txUrl}`);
-    console.log(`Successfully published cast ${castHash}`);*/
+    const castHash = await publishCast(`${text}\n\n${txUrl}`);
+    console.log(`Successfully published cast ${castHash}`);
   } catch (e) {}
 
   /**

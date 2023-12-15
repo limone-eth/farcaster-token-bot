@@ -29,8 +29,10 @@ export const decodeSwapEvent = (
     topics,
   });
   const {amount0, amount1} = event.args;
+  const amountIn = amount0 > 0 ? amount0 : amount1;
+  const amountOut = amount0 > 0 ? amount1 : amount0;
   return {
-    amountIn: amount0 > 0 ? amount0.abs() : amount1.abs(),
-    amountOut: amount1 > 0 ? amount1.abs() : amount0.abs(),
+    amountIn: amountIn,
+    amountOut: amountOut.abs(),
   };
 };
