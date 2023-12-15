@@ -98,11 +98,11 @@ export async function processWebhookEvent(
     // if we're here, no farcaster identity has been found
     if (wethIndex > pointsIndex) {
       console.log(
-        `${from} swapped ${wrappedEthData.amount} $WETH for ${pointsData.amount} $POINTS`, txUrl
+        `${from} swapped ${wrappedEthData.amount.toLocaleString()} $WETH for ${pointsData.amount.toLocaleString()} $POINTS`, txUrl
       );
     } else {
       console.log(
-        `${from} swapped ${pointsData.amount} $POINTS for ${wrappedEthData.amount} $WETH`, txUrl
+        `${from} swapped ${pointsData.amount.toLocaleString()} $POINTS for ${wrappedEthData.amount.toLocaleString()} $WETH`, txUrl
       );
     }
   }
