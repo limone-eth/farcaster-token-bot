@@ -47,9 +47,9 @@ cron.schedule("0 * * * *", async () => {
 cron.schedule("30 * * * *", async () => {
   console.log("Elaborating Farcaster leaderboard");
   try {
-    await publishFarcasterLeaderboard(5);
+    await publishFarcasterLeaderboard(10);
   } catch (e) {
     console.error(e);
-    await publishFarcasterLeaderboard(5);
+    await publishFarcasterLeaderboard(10);
   }
 });
