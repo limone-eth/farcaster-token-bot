@@ -25,7 +25,7 @@ export async function processWebhookEvent(
     topics: string[];
     transaction: {hash: string};
   } = logs.find((l) => l.topics[0] === constants.TRANSFER_EVENT_TOPIC);
-  const txUrl = `https://etherscan.io/tx/${logsData.transaction.hash}`;
+  const txUrl = `https://zapper.xyz/event/ethereum/${logsData.transaction.hash}`;
 
   const provider = new providers.JsonRpcProvider(process.env.ALCHEMY_RPC_URL);
   const txReceipt = await provider.getTransactionReceipt(
@@ -47,6 +47,7 @@ export async function processWebhookEvent(
         constants.POINTS_SMART_CONTRACT_ADDRESS.toLowerCase() &&
       l.topics[0] === constants.TRANSFER_EVENT_TOPIC
   );
+
 
   const pointsTransferLogs = txReceipt.logs.find(
     (l) =>
@@ -87,9 +88,9 @@ export async function processWebhookEvent(
     const farcasterIdentity = await getFarcasterIdentity(from);
     let text;
     if (wethIndex < pointsIndex) {
-      text = `@${farcasterIdentity} swapped ${wrappedEthData.amount.toLocaleString()} $WETH with ${pointsData.amount.toLocaleString()} $POINTS`;
+      text = `@${farcasterIdentity} swapped ${wrappedEthData.amount.toLocaleString()} $WETH for ${pointsData.amount.toLocaleString()} $POINTS`;
     } else {
-      text = `@${farcasterIdentity} swapped ${pointsData.amount.toLocaleString()} $POINTS with ${wrappedEthData.amount.toLocaleString()} $WETH`;
+      text = `@${farcasterIdentity} swapped ${pointsData.amount.toLocaleString()} $POINTS for ${wrappedEthData.amount.toLocaleString()} $WETH`;
     }
     console.log(text, txUrl);
     const castHash = await publishCast(`${text}\n\n${txUrl}`);
@@ -98,11 +99,11 @@ export async function processWebhookEvent(
     // if we're here, no farcaster identity has been found
     if (wethIndex < pointsIndex) {
       console.log(
-        `${from} swapped ${wrappedEthData.amount} $WETH with ${pointsData.amount} $POINTS`
+        `${from} swapped ${wrappedEthData.amount} $WETH for ${pointsData.amount} $POINTS`
       );
     } else {
       console.log(
-        `${from} swapped ${pointsData.amount} $POINTS with ${wrappedEthData.amount} $WETH`
+        `${from} swapped ${pointsData.amount} $POINTS for ${wrappedEthData.amount} $WETH`
       );
     }
   }
