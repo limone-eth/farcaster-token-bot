@@ -43,8 +43,8 @@ cron.schedule("0 * * * *", async () => {
   }
 });
 
-// run every hour
-cron.schedule("0 * * * *", async () => {
+// run every hour at 30 minutes
+cron.schedule("30 * * * *", async () => {
   console.log("Elaborating Farcaster leaderboard");
   try {
     await publishFarcasterLeaderboard(5);
