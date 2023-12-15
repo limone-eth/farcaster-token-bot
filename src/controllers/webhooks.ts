@@ -48,7 +48,6 @@ export async function processWebhookEvent(
       l.topics[0] === constants.TRANSFER_EVENT_TOPIC
   );
 
-
   const pointsTransferLogs = txReceipt.logs.find(
     (l) =>
       l.address.toLowerCase() ===
@@ -87,7 +86,7 @@ export async function processWebhookEvent(
   try {
     const farcasterIdentity = await getFarcasterIdentity(from);
     let text;
-    if (wethIndex < pointsIndex) {
+    if (wethIndex > pointsIndex) {
       text = `@${farcasterIdentity} swapped ${wrappedEthData.amount.toLocaleString()} $WETH for ${pointsData.amount.toLocaleString()} $POINTS`;
     } else {
       text = `@${farcasterIdentity} swapped ${pointsData.amount.toLocaleString()} $POINTS for ${wrappedEthData.amount.toLocaleString()} $WETH`;
@@ -97,13 +96,13 @@ export async function processWebhookEvent(
     console.log(`Successfully published cast ${castHash}`);
   } catch (e) {
     // if we're here, no farcaster identity has been found
-    if (wethIndex < pointsIndex) {
+    if (wethIndex > pointsIndex) {
       console.log(
-        `${from} swapped ${wrappedEthData.amount} $WETH for ${pointsData.amount} $POINTS`
+        `${from} swapped ${wrappedEthData.amount} $WETH for ${pointsData.amount} $POINTS`, txUrl
       );
     } else {
       console.log(
-        `${from} swapped ${pointsData.amount} $POINTS for ${wrappedEthData.amount} $WETH`
+        `${from} swapped ${pointsData.amount} $POINTS for ${wrappedEthData.amount} $WETH`, txUrl
       );
     }
   }
