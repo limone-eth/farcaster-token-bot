@@ -1,7 +1,7 @@
 import {gql} from "@apollo/client/core";
 
 import {fetchAllPagesQuery} from "../index";
-import {BigNumber, ethers} from "ethers";
+import {ethers} from "ethers";
 import {constants} from "../../../constants";
 import {publishCast} from "../../farcaster";
 
