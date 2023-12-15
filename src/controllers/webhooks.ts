@@ -37,13 +37,15 @@ export async function processWebhookEvent(
   const wethIndex = txReceipt.logs.findIndex(
     (l) =>
       l.address.toLowerCase() ===
-      constants.WRAPPED_ETH_SMART_CONTRACT_ADDRESS.toLowerCase()
+        constants.WRAPPED_ETH_SMART_CONTRACT_ADDRESS.toLowerCase() &&
+      l.topics[0] === constants.TRANSFER_EVENT_TOPIC
   );
 
   const pointsIndex = txReceipt.logs.findIndex(
     (l) =>
       l.address.toLowerCase() ===
-      constants.POINTS_SMART_CONTRACT_ADDRESS.toLowerCase()
+        constants.POINTS_SMART_CONTRACT_ADDRESS.toLowerCase() &&
+      l.topics[0] === constants.TRANSFER_EVENT_TOPIC
   );
 
   const pointsTransferLogs = txReceipt.logs.find(
