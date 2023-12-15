@@ -1,10 +1,9 @@
 import {Request, Response} from "express";
 import {AlchemyWebhookEvent} from "../utils/alchemy";
 import {constants} from "../constants";
-import {decodeTransferEvent} from "../utils/smart-contracts/decode-events";
-import {providers} from "ethers";
+import {decodeSwapEvent} from "../utils/smart-contracts/decode-events";
 import {getFarcasterIdentity} from "../utils/web3-bio";
-import {publishCast} from "../utils/farcaster";
+import {ethers} from "ethers";
 
 export async function processWebhookEvent(
   req: Request,
@@ -24,88 +23,63 @@ export async function processWebhookEvent(
     account: {address: string};
     topics: string[];
     transaction: {hash: string};
-  } = logs.find((l) => l.topics[0] === constants.TRANSFER_EVENT_TOPIC);
-  const txUrl = `https://zapper.xyz/event/ethereum/${logsData.transaction.hash}`;
+  } = logs.find((l) => l.topics[0] === constants.POOL_SWAP_EVENT_TOPIC);
 
-  const provider = new providers.JsonRpcProvider(process.env.ALCHEMY_RPC_URL);
+  let txUrl: string;
+  try {
+    txUrl = `https://zapper.xyz/event/ethereum/${logsData.transaction.hash}`;
+  } catch (e) {
+    console.error(e);
+    res.json({message: "Error processing webhook event"});
+    return;
+  }
+
+  /*const provider = new providers.JsonRpcProvider(process.env.ALCHEMY_RPC_URL);
   const txReceipt = await provider.getTransactionReceipt(
     logsData.transaction.hash
   );
 
-  const {from} = txReceipt;
+  const {from} = txReceipt;*/
 
-  const wethIndex = txReceipt.logs.findIndex(
-    (l) =>
-      l.address.toLowerCase() ===
-        constants.WRAPPED_ETH_SMART_CONTRACT_ADDRESS.toLowerCase() &&
-      l.topics[0] === constants.TRANSFER_EVENT_TOPIC
-  );
+  const {amountIn, amountOut} = decodeSwapEvent(logsData.topics, logsData.data);
 
-  const pointsIndex = txReceipt.logs.findIndex(
-    (l) =>
-      l.address.toLowerCase() ===
-        constants.POINTS_SMART_CONTRACT_ADDRESS.toLowerCase() &&
-      l.topics[0] === constants.TRANSFER_EVENT_TOPIC
-  );
+  const pointsAmount = amountIn > amountOut ? amountIn : amountOut;
+  const wethAmount = amountIn > amountOut ? amountOut : amountIn;
 
-  const pointsTransferLogs = txReceipt.logs.find(
-    (l) =>
-      l.address.toLowerCase() ===
-        constants.POINTS_SMART_CONTRACT_ADDRESS.toLowerCase() &&
-      l.topics[0] === constants.TRANSFER_EVENT_TOPIC
-  );
+  const formattedPointsAmount = ethers.utils
+    .formatUnits(pointsAmount, 18)
+    .replace(/(\.\d{0,4})\d*$/, "$1");
+  const formattedWethAmount = ethers.utils
+    .formatUnits(wethAmount, 18)
+    .replace(/(\.\d{0,4})\d*$/, "$1");
 
-  const wrappedEthTransferLogs = txReceipt.logs.find(
-    (l) =>
-      l.address.toLowerCase() ===
-        constants.WRAPPED_ETH_SMART_CONTRACT_ADDRESS.toLowerCase() &&
-      l.topics[0] === constants.TRANSFER_EVENT_TOPIC
-  );
-
-  if (!wrappedEthTransferLogs || !pointsTransferLogs) {
-    console.log(
-      "No wrapped eth or points transfer logs found in webhook event",
-      logsData
-    );
-    res.json({
-      message: "No wrapped eth or points transfer logs found in webhook event",
-    });
-    return;
-  }
-
-  const wrappedEthData = decodeTransferEvent(
-    wrappedEthTransferLogs.topics as string[],
-    wrappedEthTransferLogs.data as string
-  );
-
-  const pointsData = decodeTransferEvent(
-    pointsTransferLogs.topics as string[],
-    pointsTransferLogs.data as string
-  );
+  console.log({
+    amountIn,
+    amountOut,
+    pointsAmount,
+    wethAmount,
+    formattedPointsAmount,
+    formattedWethAmount,
+  });
 
   try {
-    const farcasterIdentity = await getFarcasterIdentity(from);
-    let text;
-    if (wethIndex > pointsIndex) {
-      text = `@${farcasterIdentity} swapped ${wrappedEthData.amount.toLocaleString()} $WETH for ${pointsData.amount.toLocaleString()} $POINTS`;
-    } else {
-      text = `@${farcasterIdentity} swapped ${pointsData.amount.toLocaleString()} $POINTS for ${wrappedEthData.amount.toLocaleString()} $WETH`;
-    }
+    const farcasterIdentity = await getFarcasterIdentity(
+      "0x1358155a15930f89eBc787a34Eb4ccfd9720bC62"
+    );
+    const text = `@${farcasterIdentity} swapped ${
+      amountIn === pointsAmount
+        ? `${formattedPointsAmount} $POINTS`
+        : `${formattedWethAmount} $WETH`
+    } for ${
+      amountOut === pointsAmount
+        ? `${formattedPointsAmount} $POINTS`
+        : `${formattedWethAmount} $WETH`
+    }`;
+
     console.log(text, txUrl);
-    const castHash = await publishCast(`${text}\n\n${txUrl}`);
-    console.log(`Successfully published cast ${castHash}`);
-  } catch (e) {
-    // if we're here, no farcaster identity has been found
-    if (wethIndex > pointsIndex) {
-      console.log(
-        `${from} swapped ${wrappedEthData.amount.toLocaleString()} $WETH for ${pointsData.amount.toLocaleString()} $POINTS`, txUrl
-      );
-    } else {
-      console.log(
-        `${from} swapped ${pointsData.amount.toLocaleString()} $POINTS for ${wrappedEthData.amount.toLocaleString()} $WETH`, txUrl
-      );
-    }
-  }
+    /*const castHash = await publishCast(`${text}\n\n${txUrl}`);
+    console.log(`Successfully published cast ${castHash}`);*/
+  } catch (e) {}
 
   /**
    * Do things here with the received data
