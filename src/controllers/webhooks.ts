@@ -91,7 +91,9 @@ export async function processWebhookEvent(
     } else {
       text = `@${farcasterIdentity} swapped ${pointsData.amount.toLocaleString()} $POINTS with ${wrappedEthData.amount.toLocaleString()} $WETH`;
     }
-    await publishCast(`${text}\n\n${txUrl}`);
+    console.log(text, txUrl);
+    const castHash = await publishCast(`${text}\n\n${txUrl}`);
+    console.log(`Successfully published cast ${castHash}`);
   } catch (e) {
     // if we're here, no farcaster identity has been found
     if (wethIndex < pointsIndex) {
