@@ -3,7 +3,7 @@ import {AlchemyWebhookEvent} from "../utils/alchemy";
 import {constants} from "../constants";
 import {decodeSwapEvent} from "../utils/smart-contracts/decode-events";
 import {getFarcasterIdentity} from "../utils/web3-bio";
-import {ethers} from "ethers";
+import {ethers, providers} from "ethers";
 import { publishCast } from "../utils/farcaster";
 
 export async function processWebhookEvent(
@@ -35,12 +35,12 @@ export async function processWebhookEvent(
     return;
   }
 
-  /*const provider = new providers.JsonRpcProvider(process.env.ALCHEMY_RPC_URL);
+  const provider = new providers.JsonRpcProvider(process.env.ALCHEMY_RPC_URL);
   const txReceipt = await provider.getTransactionReceipt(
     logsData.transaction.hash
   );
 
-  const {from} = txReceipt;*/
+  const {from} = txReceipt;
 
   const {amountIn, amountOut} = decodeSwapEvent(logsData.topics, logsData.data);
 
@@ -56,7 +56,7 @@ export async function processWebhookEvent(
 
   try {
     const farcasterIdentity = await getFarcasterIdentity(
-      "0x1358155a15930f89eBc787a34Eb4ccfd9720bC62"
+      from
     );
     const text = `@${farcasterIdentity} swapped ${
       amountIn === pointsAmount
