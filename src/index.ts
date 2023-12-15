@@ -34,5 +34,10 @@ app.listen(process.env.PORT || 3000, () => {
 // run every 1 hour
 cron.schedule("0 * * * *", async () => {
   console.log("Elaborating Point stats...");
-  await publishPointsStats();
+  try {
+    await publishPointsStats();
+  } catch (e) {
+    console.error(e);
+    await publishPointsStats();
+  }
 });

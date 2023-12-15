@@ -125,9 +125,9 @@ export const publishPointsStats = async (): Promise<void> => {
 
   console.log({tokenInfo, tokenPriceInfo, poolPriceInfo});
 
-  const text = `📈 $points stats: \n\n- market cap ${
+  const text = `📈 $points stats: \n\n- market cap -> $${(
     tokenPriceInfo.price * tokenInfo.totalSupply
-  }\n\n- volume (last 24h) ${poolPriceInfo.volume24h}\n\n- holders: ${
+  ).toLocaleString()}\n\n- volume (last 24h) -> $${poolPriceInfo.volume24h.toLocaleString()}\n\n- holders -> ${
     tokenInfo.holders
   }\n\n`;
 
