@@ -30,10 +30,12 @@
   "dependencies": {
     "@standard-crypto/farcaster-js-neynar": "^2.0.0",
     "@thirdweb-dev/sdk": "^3.10.12",
+    "@types/node-cron": "^3.0.11",
     "bignumber.js": "^9.1.1",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "node-cron": "^3.0.3"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",

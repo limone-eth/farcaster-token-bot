@@ -10,5 +10,6 @@ export const constants = {
   WRAPPED_ETH_SMART_CONTRACT_ADDRESS:
     "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
   POINTS_SMART_CONTRACT_ADDRESS: "0xd7c1eb0fe4a30d3b2a846c04aa6300888f087a5f",
+  POINTS_WETH_POOL_ADDRESS: "0xa424817985051ccda51eff2dc7998b5d68079215",
   POLYGON_MUMBAI_RPC: `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
 };
