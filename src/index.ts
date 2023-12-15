@@ -5,6 +5,7 @@ import cron from "node-cron";
 
 import "dotenv/config";
 import {publishPointsStats} from "./utils/dextools";
+import {publishFarcasterLeaderboard} from "./utils/airstack/functions/fetch-token-holders";
 
 // init express app
 export const app = express();
@@ -39,5 +40,16 @@ cron.schedule("0 * * * *", async () => {
   } catch (e) {
     console.error(e);
     await publishPointsStats();
+  }
+});
+
+// run every hour
+cron.schedule("0 * * * *", async () => {
+  console.log("Elaborating Farcaster leaderboard");
+  try {
+    await publishFarcasterLeaderboard(5);
+  } catch (e) {
+    console.error(e);
+    await publishFarcasterLeaderboard(5);
   }
 });

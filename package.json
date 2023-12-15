@@ -28,6 +28,8 @@
   },
   "homepage": "https://github.com/urbeETH/node-web3-js#readme",
   "dependencies": {
+    "@airstack/node": "^0.0.5",
+    "@apollo/client": "^3.8.8",
     "@standard-crypto/farcaster-js-neynar": "^2.0.0",
     "@thirdweb-dev/sdk": "^3.10.12",
     "@types/node-cron": "^3.0.11",
