@@ -1,20 +1,19 @@
 import {ethers} from "ethers";
-import BigNumber from "bignumber.js";
-import {tokenContractAbi} from "./abi";
+import {pointsAbi} from "./points-abi";
 
 export const decodeTransferEvent = (
   topics: Array<string>,
-  data: string
+  data: string,
 ): {to: string; amount: number; from: string} => {
-  const iface = new ethers.utils.Interface(tokenContractAbi);
+  const iface = new ethers.utils.Interface(pointsAbi);
   const event = iface.parseLog({
     data,
     topics,
   });
-  const [from, to, amount] = event.args;
+  const {from, to, value} = event.args;
   return {
     to, // the address that received the tokens
     from, // the address that sent the tokens
-    amount: BigNumber(amount).toNumber(), // the amount of tokens received
+    amount: value / 10 ** 18, // the amount of tokens received
   };
 };

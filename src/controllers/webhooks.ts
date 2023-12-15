@@ -2,6 +2,9 @@ import {Request, Response} from "express";
 import {AlchemyWebhookEvent} from "../utils/alchemy";
 import {constants} from "../constants";
 import {decodeTransferEvent} from "../utils/smart-contracts/decode-events";
+import {providers} from "ethers";
+import {getFarcasterIdentity} from "../utils/web3-bio";
+import {publishCast} from "../utils/farcaster";
 
 export async function processWebhookEvent(
   req: Request,
@@ -16,15 +19,89 @@ export async function processWebhookEvent(
     res.json({message: "No logs found in webhook event"});
     return;
   }
-  const logsData: {data: string; topics: string[]} = logs.find(
-    (l) => l.topics[0] === constants.TOKEN_SMART_CONTRACT.TRANSFER_EVENT_TOPIC
+  const logsData: {
+    data: string;
+    account: {address: string};
+    topics: string[];
+    transaction: {hash: string};
+  } = logs.find((l) => l.topics[0] === constants.TRANSFER_EVENT_TOPIC);
+  const txUrl = `https://etherscan.io/tx/${logsData.transaction.hash}`;
+
+  const provider = new providers.JsonRpcProvider(process.env.ALCHEMY_RPC_URL);
+  const txReceipt = await provider.getTransactionReceipt(
+    logsData.transaction.hash
   );
-  console.log("Logs found in webhook event", logsData);
-  const {from, to, amount} = decodeTransferEvent(
-    logsData.topics,
-    logsData.data
+
+  const {from} = txReceipt;
+
+  const wethIndex = txReceipt.logs.findIndex(
+    (l) =>
+      l.address.toLowerCase() ===
+      constants.WRAPPED_ETH_SMART_CONTRACT_ADDRESS.toLowerCase()
   );
-  console.log("Decoded register event", {from, to, amount});
+
+  const pointsIndex = txReceipt.logs.findIndex(
+    (l) =>
+      l.address.toLowerCase() ===
+      constants.POINTS_SMART_CONTRACT_ADDRESS.toLowerCase()
+  );
+
+  const pointsTransferLogs = txReceipt.logs.find(
+    (l) =>
+      l.address.toLowerCase() ===
+        constants.POINTS_SMART_CONTRACT_ADDRESS.toLowerCase() &&
+      l.topics[0] === constants.TRANSFER_EVENT_TOPIC
+  );
+
+  const wrappedEthTransferLogs = txReceipt.logs.find(
+    (l) =>
+      l.address.toLowerCase() ===
+        constants.WRAPPED_ETH_SMART_CONTRACT_ADDRESS.toLowerCase() &&
+      l.topics[0] === constants.TRANSFER_EVENT_TOPIC
+  );
+
+  if (!wrappedEthTransferLogs || !pointsTransferLogs) {
+    console.log(
+      "No wrapped eth or points transfer logs found in webhook event",
+      logsData
+    );
+    res.json({
+      message: "No wrapped eth or points transfer logs found in webhook event",
+    });
+    return;
+  }
+
+  const wrappedEthData = decodeTransferEvent(
+    wrappedEthTransferLogs.topics as string[],
+    wrappedEthTransferLogs.data as string
+  );
+
+  const pointsData = decodeTransferEvent(
+    pointsTransferLogs.topics as string[],
+    pointsTransferLogs.data as string
+  );
+
+  try {
+    const farcasterIdentity = await getFarcasterIdentity(from);
+    let text;
+    if (wethIndex < pointsIndex) {
+      text = `@${farcasterIdentity} swapped ${wrappedEthData.amount.toLocaleString()} $WETH with ${pointsData.amount.toLocaleString()} $POINTS`;
+    } else {
+      text = `@${farcasterIdentity} swapped ${pointsData.amount.toLocaleString()} $POINTS with ${wrappedEthData.amount.toLocaleString()} $WETH`;
+    }
+    await publishCast(`${text}\n\n${txUrl}`);
+  } catch (e) {
+    // if we're here, no farcaster identity has been found
+    if (wethIndex < pointsIndex) {
+      console.log(
+        `${from} swapped ${wrappedEthData.amount} $WETH with ${pointsData.amount} $POINTS`
+      );
+    } else {
+      console.log(
+        `${from} swapped ${pointsData.amount} $POINTS with ${wrappedEthData.amount} $WETH`
+      );
+    }
+  }
 
   /**
    * Do things here with the received data

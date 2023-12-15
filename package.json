@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/urbeETH/node-web3-js#readme",
   "dependencies": {
+    "@standard-crypto/farcaster-js-neynar": "^2.0.0",
     "@thirdweb-dev/sdk": "^3.10.12",
     "bignumber.js": "^9.1.1",
     "dotenv": "^16.0.3",
