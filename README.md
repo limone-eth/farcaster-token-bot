@@ -1,7 +1,5 @@
-# pointsbot
+# farcaster token bot
 
-A Farcaster bot that tracks $POINTS, the infamous Farcaster meme-coin.
+clone this repository to easily spin-up a farcaster bot that tracks a token.
 
-https://warpcast.com/pointsbot
-
-Note: This bot is in no way involved with the actual token, it only tracks swaps and top holders on Farcaster.
+## how to
