@@ -1,5 +1,5 @@
 {
-  "name": "web3",
+  "name": "farcaster-token-bot",
   "version": "1.0.0",
   "description": "",
   "main": "lib/src/index.js",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/urbeETH/node-web3-js.git"
+    "url": "git+https://github.com/limone-eth/farcaster-token-bot.git"
   },
   "keywords": [
     "web3js",
@@ -21,19 +21,13 @@
     "typescript",
     "express"
   ],
-  "author": "lim0n3",
+  "author": "limone-eth",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/urbeETH/node-web3-js/issues"
-  },
-  "homepage": "https://github.com/urbeETH/node-web3-js#readme",
   "dependencies": {
     "@airstack/node": "^0.0.5",
     "@apollo/client": "^3.8.8",
     "@standard-crypto/farcaster-js-neynar": "^2.0.0",
-    "@thirdweb-dev/sdk": "^3.10.12",
     "@types/node-cron": "^3.0.11",
-    "bignumber.js": "^9.1.1",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
     "express": "^4.18.2",

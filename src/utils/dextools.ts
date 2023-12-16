@@ -115,12 +115,12 @@ export const getPoolPriceInfo = async (
 };
 
 export const publishPointsStats = async (): Promise<void> => {
-  const tokenInfo = await getTokenInfo(constants.POINTS_SMART_CONTRACT_ADDRESS);
+  const tokenInfo = await getTokenInfo(constants.TOKEN_SMART_CONTRACT_ADDRESS);
   const tokenPriceInfo = await getTokenPriceInfo(
-    constants.POINTS_SMART_CONTRACT_ADDRESS
+    constants.TOKEN_SMART_CONTRACT_ADDRESS
   );
   const poolPriceInfo = await getPoolPriceInfo(
-    constants.POINTS_WETH_POOL_ADDRESS
+    constants.TOKEN_UNISWAP_POOL_ADDRESS
   );
 
   console.log({tokenInfo, tokenPriceInfo, poolPriceInfo});

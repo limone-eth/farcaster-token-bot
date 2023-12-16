@@ -76,10 +76,10 @@ export const fetchTokenBalancesProfiles = async (tokenAddress: string) => {
 
 export const publishFarcasterLeaderboard = async (topK = 10) => {
   const tokenPriceInfo = await getTokenPriceInfo(
-    constants.POINTS_SMART_CONTRACT_ADDRESS
+    constants.TOKEN_SMART_CONTRACT_ADDRESS
   );
   const tokenBalancesProfiles = await fetchTokenBalancesProfiles(
-    constants.POINTS_SMART_CONTRACT_ADDRESS
+    constants.TOKEN_SMART_CONTRACT_ADDRESS
   );
 
   const leaderboard = tokenBalancesProfiles
