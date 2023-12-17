@@ -1,4 +1,5 @@
-export const pointsAbi = [
+// TODO: Replace with your token ABI
+export const yourTokenAbi = [
   {
     inputs: [{internalType: "address", name: "initialOwner", type: "address"}],
     stateMutability: "nonpayable",
