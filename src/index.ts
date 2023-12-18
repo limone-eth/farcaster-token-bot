@@ -1,11 +1,11 @@
+import "dotenv/config";
 import express from "express";
 import {prepareAlchemyData, validateAlchemySignature} from "./utils/alchemy";
-import {processPoolSwapEvent} from "./controllers/webhooks";
+import {processPoolSwapEvent} from "./controllers/webhooks/swap";
 import cron from "node-cron";
 
-import "dotenv/config";
-import {publishPointsStats} from "./utils/dextools";
-import {publishFarcasterLeaderboard} from "./utils/airstack/functions/fetch-token-holders";
+import {publishTokenStats} from "./jobs/token-stats";
+import {publishFarcasterLeaderboard} from "./jobs/farcaster-holders-leaderboard";
 
 // init express app
 export const app = express();
@@ -37,12 +37,12 @@ app.listen(process.env.PORT || 3000, () => {
 
 // run every 1 hour
 cron.schedule("0 * * * *", async () => {
-  console.log("Elaborating Point stats...");
+  console.log("Elaborating Tokens stats...");
   try {
-    await publishPointsStats();
+    await publishTokenStats();
   } catch (e) {
     console.error(e);
-    await publishPointsStats();
+    await publishTokenStats();
   }
 });
 
