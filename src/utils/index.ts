@@ -1,3 +1,5 @@
+import {ethers} from "ethers";
+
 export const formatAddress = (address: string) => {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 };
@@ -33,4 +35,10 @@ export const getTransactionUrl = (
           : "https://basescan.org"
       }/tx/${txHash}`;
   }
+};
+
+export const formatBigNumber = (value: BigNumber, decimals = 18) => {
+  return ethers.utils
+    .formatUnits(value, decimals)
+    .replace(/(\.\d{0,4})\d*$/, "$1");
 };

@@ -6,6 +6,7 @@ import cron from "node-cron";
 
 import {publishTokenStats} from "./jobs/token-stats";
 import {publishFarcasterLeaderboard} from "./jobs/farcaster-holders-leaderboard";
+import {processTransferEvent} from "./controllers/webhooks/transfer";
 
 // init express app
 export const app = express();
@@ -20,8 +21,6 @@ app.post(
   processPoolSwapEvent
 );
 
-/*
-TODO: Uncomment this code to enable the transfer event webhook
 app.post(
   "/webhooks/token/transfers",
   // Middlewares needed to validate the alchemy signature
@@ -29,7 +28,6 @@ app.post(
   validateAlchemySignature(process.env.ALCHEMY_WEBHOOK_SIGNING_KEY_TRANSFER),
   processTransferEvent
 );
-*/
 
 app.listen(process.env.PORT || 3000, () => {
   console.log("Server started on port 3000");

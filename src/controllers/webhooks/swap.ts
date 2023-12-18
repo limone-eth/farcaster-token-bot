@@ -5,7 +5,7 @@ import {decodeSwapEvent} from "../../utils/smart-contracts/decode-events";
 import {getFarcasterIdentity} from "../../utils/web3-bio";
 import {ethers, providers} from "ethers";
 import {publishCast} from "../../utils/farcaster";
-import {getTransactionUrl} from "../../utils";
+import {formatBigNumber, getTransactionUrl} from "../../utils";
 
 export async function processPoolSwapEvent(
   req: Request,
@@ -48,25 +48,21 @@ export async function processPoolSwapEvent(
 
   // decode the swap event and format the amounts
   const {amountIn, amountOut} = decodeSwapEvent(logsData.topics, logsData.data);
-  const pointsAmount = amountIn.gte(amountOut) ? amountIn : amountOut;
+  const tokensAmount = amountIn.gte(amountOut) ? amountIn : amountOut;
   const wethAmount = amountIn.gte(amountOut) ? amountOut : amountIn;
-  const formattedPointsAmount = ethers.utils
-    .formatUnits(pointsAmount, 18)
-    .replace(/(\.\d{0,4})\d*$/, "$1");
-  const formattedWethAmount = ethers.utils
-    .formatUnits(wethAmount, 18)
-    .replace(/(\.\d{0,4})\d*$/, "$1");
+  const formattedTokensAmount = formatBigNumber(tokensAmount, 18);
+  const formattedWethAmount = formatBigNumber(wethAmount, 18);
 
   try {
     // prepare the text for the cast and publish it
     const farcasterIdentity = await getFarcasterIdentity(from);
     const text = `@${farcasterIdentity} swapped ${
-      amountIn === pointsAmount
-        ? `${formattedPointsAmount} $POINTS`
+      amountIn === tokensAmount
+        ? `${formattedTokensAmount} $POINTS`
         : `${formattedWethAmount} $WETH`
     } for ${
-      amountOut === pointsAmount
-        ? `${formattedPointsAmount} $POINTS`
+      amountOut === tokensAmount
+        ? `${formattedTokensAmount} $POINTS`
         : `${formattedWethAmount} $WETH`
     }`;
 

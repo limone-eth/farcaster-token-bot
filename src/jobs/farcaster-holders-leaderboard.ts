@@ -4,11 +4,9 @@ import {getTokenPriceInfo} from "../utils/dextools";
 import {publishCast, replyToCast} from "../utils/farcaster";
 
 export const publishFarcasterLeaderboard = async (topK = 10) => {
-  const tokenPriceInfo = await getTokenPriceInfo(
-    constants.TOKEN_SMART_CONTRACT_ADDRESS
-  );
+  const tokenPriceInfo = await getTokenPriceInfo(constants.TOKEN_ADDRESS);
   const tokenBalancesProfiles = await fetchTokenBalancesProfiles(
-    constants.TOKEN_SMART_CONTRACT_ADDRESS
+    constants.TOKEN_ADDRESS
   );
 
   const leaderboard = tokenBalancesProfiles

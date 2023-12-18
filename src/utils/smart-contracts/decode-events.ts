@@ -1,12 +1,11 @@
 import {BigNumber, ethers} from "ethers";
-import {yourTokenAbi} from "./your-token-abi";
-import {poolAbi} from "./pool-abi";
+import {erc20Abi} from "./erc20-abi";
 
 export const decodeTransferEvent = (
   topics: Array<string>,
   data: string
 ): {to: string; value: BigNumber; from: string} => {
-  const iface = new ethers.utils.Interface(yourTokenAbi);
+  const iface = new ethers.utils.Interface(erc20Abi);
   const event = iface.parseLog({
     data,
     topics,
@@ -23,7 +22,7 @@ export const decodeSwapEvent = (
   topics: Array<string>,
   data: string
 ): {amountIn: BigNumber; amountOut: BigNumber} => {
-  const iface = new ethers.utils.Interface(poolAbi);
+  const iface = new ethers.utils.Interface(erc20Abi);
   const event = iface.parseLog({
     data,
     topics,
