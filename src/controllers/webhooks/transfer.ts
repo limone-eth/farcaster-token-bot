@@ -2,7 +2,7 @@ import {Request, Response} from "express";
 import {AlchemyWebhookEvent} from "../../utils/alchemy";
 import {constants} from "../../constants";
 import {formatAddress, formatBigNumber, getTransactionUrl} from "../../utils";
-import {ethers, providers} from "ethers";
+import {providers} from "ethers";
 import {decodeTransferEvent} from "../../utils/smart-contracts/decode-events";
 import {getFarcasterIdentity} from "../../utils/web3-bio";
 import {publishCast} from "../../utils/farcaster";

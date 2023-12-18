@@ -3,7 +3,7 @@ import {AlchemyWebhookEvent} from "../../utils/alchemy";
 import {constants} from "../../constants";
 import {decodeSwapEvent} from "../../utils/smart-contracts/decode-events";
 import {getFarcasterIdentity} from "../../utils/web3-bio";
-import {ethers, providers} from "ethers";
+import {providers} from "ethers";
 import {publishCast} from "../../utils/farcaster";
 import {formatBigNumber, getTransactionUrl} from "../../utils";
 
