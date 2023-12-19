@@ -1,5 +1,6 @@
 import {BigNumber, ethers} from "ethers";
 import {erc20Abi} from "./erc20-abi";
+import {poolAbi} from "./pool-abi";
 
 export const decodeTransferEvent = (
   topics: Array<string>,
@@ -22,7 +23,7 @@ export const decodeSwapEvent = (
   topics: Array<string>,
   data: string
 ): {amountIn: BigNumber; amountOut: BigNumber} => {
-  const iface = new ethers.utils.Interface(erc20Abi);
+  const iface = new ethers.utils.Interface(poolAbi);
   const event = iface.parseLog({
     data,
     topics,
