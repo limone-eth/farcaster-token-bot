@@ -63,7 +63,7 @@ export async function processTransferEvent(
       res.json({message: "No farcaster identities involved in this event."});
       return;
     }
-    
+
     const fromText = farcasterFromIdentity
       ? `@${farcasterFromIdentity}`
       : formatAddress(from);
@@ -73,7 +73,7 @@ export async function processTransferEvent(
 
     const text = `${fromText} transferred ${formatBigNumber(
       value,
-      parseInt(process.env.TOKEN_DECIMALS)
+      constants.TOKEN_DECIMALS
     )} $${constants.TOKEN_SYMBOL} to ${toText}`;
 
     console.log(text, txUrl);
