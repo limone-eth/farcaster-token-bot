@@ -53,24 +53,26 @@ export async function processPoolSwapEvent(
   const formattedTokensAmount = formatBigNumber(tokensAmount, 18);
   const formattedWethAmount = formatBigNumber(wethAmount, 18);
 
-  try {
-    // prepare the text for the cast and publish it
-    const farcasterIdentity = await getFarcasterIdentity(from);
-    const text = `@${farcasterIdentity} swapped ${
-      amountIn === tokensAmount
-        ? `${formattedTokensAmount} $POINTS`
-        : `${formattedWethAmount} $WETH`
-    } for ${
-      amountOut === tokensAmount
-        ? `${formattedTokensAmount} $POINTS`
-        : `${formattedWethAmount} $WETH`
-    }`;
-
-    console.log(text, txUrl);
-    const castHash = await publishCast(`${text}\n\n${txUrl}`);
-    console.log(`Successfully published cast ${castHash}`);
-  } catch (e) {
-    // if we are here, it means that the user is not registered on Farcaster
+  // prepare the text for the cast and publish it
+  const farcasterIdentity = await getFarcasterIdentity(from);
+  if (farcasterIdentity) {
+    res.json({message: "No farcaster identity involved in this event."});
+    return;
   }
+
+  const text = `@${farcasterIdentity} swapped ${
+    amountIn === tokensAmount
+      ? `${formattedTokensAmount} $POINTS`
+      : `${formattedWethAmount} $WETH`
+  } for ${
+    amountOut === tokensAmount
+      ? `${formattedTokensAmount} $POINTS`
+      : `${formattedWethAmount} $WETH`
+  }`;
+
+  console.log(text, txUrl);
+  const castHash = await publishCast(`${text}\n\n${txUrl}`);
+  console.log(`Successfully published cast ${castHash}`);
+
   res.json({message: "Successfully processed webhook event"});
 }

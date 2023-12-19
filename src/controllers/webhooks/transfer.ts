@@ -59,6 +59,11 @@ export async function processTransferEvent(
 
     const farcasterFromIdentity = await getFarcasterIdentity(from);
     const farcasterToIdentity = await getFarcasterIdentity(to);
+    if (!farcasterFromIdentity && !farcasterToIdentity) {
+      res.json({message: "No farcaster identities involved in this event."});
+      return;
+    }
+    
     const fromText = farcasterFromIdentity
       ? `@${farcasterFromIdentity}`
       : formatAddress(from);
