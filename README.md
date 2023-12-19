@@ -19,7 +19,7 @@ this repository was started for [pointsbot](https://warpcast.com/pointsbot), mea
 
 1. install packages with `bun install` (if u don't use `bun`, u can still use `npm` or `yarn`)
 2. setup local env with `cp .env.tpl .env` and then populate your `.env`
-3. update **_src/utils/smart-contracts/your-token-abi.ts_** with your token abi (needed to properly decode emitted events) - you can find a token abi on [etherscan](https://warpcast.com/pointsbot/0x9dfb424a) (if the contract is verified)
+3. update **__src/constants/index.ts__** accordingly with your token details (address, symbol and decimals) - you can find those on https://etherscan.io/token/YOUR_TOKEN_ADDRESS
 4. deploy it somewhere - i used [railway](https://railway.app/) and created a simple service connected to my github repository, so that at each push it triggers a new deployment.
 
 ### about api keys
