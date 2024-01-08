@@ -13,7 +13,7 @@ export const publishTokenStats = async (): Promise<void> => {
     constants.TOKEN_UNISWAP_POOL_ADDRESS
   );
 
-  const text = `📈 $points stats: \n\n- market cap -> $${(
+  const text = `📈 $${constants.TOKEN_SYMBOL.toLowerCase()} stats: \n\n- market cap -> $${(
     tokenPriceInfo.price * tokenInfo.totalSupply
   ).toLocaleString()}\n\n- volume (last 24h) -> $${poolPriceInfo.volume24h.toLocaleString()}\n\n- holders -> ${
     tokenInfo.holders
