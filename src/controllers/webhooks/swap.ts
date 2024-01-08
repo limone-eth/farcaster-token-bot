@@ -55,7 +55,7 @@ export async function processPoolSwapEvent(
 
   // prepare the text for the cast and publish it
   const farcasterIdentity = await getFarcasterIdentity(from);
-  if (farcasterIdentity) {
+  if (!farcasterIdentity) {
     res.json({message: "No farcaster identity involved in this event."});
     return;
   }
