@@ -12,7 +12,7 @@ export const constants = {
   // the decimals of the token you want to track
   TOKEN_DECIMALS: 18,
   // the symbol of the token you want to track
-  TOKEN_SYMBOL: "POINTS",
+  TOKEN_SYMBOL: process.env.TOKEN_SYMBOL || "POINTS",
   // the address of the Uniswap V3 Pool you want to track (for swaps)
   TOKEN_UNISWAP_POOL_ADDRESS: "0xa424817985051ccda51eff2dc7998b5d68079215",
 };
